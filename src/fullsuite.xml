@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Full">
+    <test name="Testing Everything" >
+        <classes>
+            <class name="HomeTest"/>
+            <class name="Groups.Group1Methods"/>
+            <class name="Annotations.TestPriorityDescription"/>
+        </classes>
+    </test>
+</suite>
