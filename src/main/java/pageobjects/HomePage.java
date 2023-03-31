@@ -18,6 +18,9 @@ public class HomePage extends Setup {
     @FindBy(xpath = "//button[@aria-label='Search']")
     WebElement searchButton;
 
+    @FindBy(xpath = "//div[@id='category-name-header']/h1")
+    WebElement searchRefrigeratorResult;
+
     @FindBy(xpath = "//a[@id='navigation-dropdown']")
     WebElement shopMenu;
 
@@ -25,15 +28,22 @@ public class HomePage extends Setup {
     @FindBy(xpath = "//a[@id='navigation-dropdown']")
     Set<WebElement> shopLinks;
 
-    // Grocery
-
-    // List of items under Shop category
-
+    // Anchor tags for links
     @FindBy(tagName = "a")
-    List<WebElement> allLinks;
+    public List<WebElement> allLinks;
+
+    @FindBy(css = "[id='footer-list']")
+    public List<WebElement> footers;
 
     @FindBy(xpath = "//button[@id='closeEmailPopup']/span")
     WebElement emailPopup;
+
+    // Sign in page link locator by id
+    @FindBy(id = "header_sign_in")
+    WebElement login;
+
+    @FindBy(className = "costco-logo")
+    WebElement loginLogo;
 
     @FindBy(id = "Home_Ancillary_2")
     WebElement deals;
@@ -65,13 +75,27 @@ public class HomePage extends Setup {
 
     // Get the total number of links on the page
     public int pageLinkAmount() {
-        int linkNumber = allLinks.size();
-        return linkNumber;
+        return allLinks.size();
     }
 
     // Close popup after waiting for it
-    public void closePopup(WebDriver drE) {
-        explicitWait(drE, emailPopup);
+    public void closePopup(WebDriver dr) {
+        explicitWaitClickable(dr, emailPopup);
         emailPopup.click();
     }
+
+    public void gotoSignIn(WebDriver dr) {
+        login.click();
+        explicitWaitClickable(dr, loginLogo);
+    }
+
+    public boolean verifySearch(WebDriver dr) {
+        explicitWaitVisible(dr, searchRefrigeratorResult);
+        return searchRefrigeratorResult.isDisplayed();
+    }
+
+    public boolean emailPopupDisplayed() {
+        return emailPopup.isDisplayed();
+    }
+
 }

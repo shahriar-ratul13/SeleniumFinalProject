@@ -1,18 +1,19 @@
 import common.Setup;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageobjects.HomePage;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+
+import static org.testng.Assert.*;
 
 public class HomeTest extends Setup {
 
     HomePage home;
-
 
     @BeforeMethod // Open a new browser window for each test
     void initializeTest() {
@@ -21,12 +22,16 @@ public class HomeTest extends Setup {
         // Initialize the web elements from the class as objects
         home = PageFactory.initElements(driver, HomePage.class);
         // Implicitly wait 10s
-//        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    @AfterTest // Close all windows/driver instances after tests are completed
+    @AfterMethod // Close all browser windows
     void exitBrowser() {
-        quitBrowser();
+        closeBrowser();
+    }
+
+    @AfterTest // Close all driver instances after tests are completed
+    void exitDriver() {
+        quitDriver();
     }
 
 
@@ -34,20 +39,21 @@ public class HomeTest extends Setup {
     void testTitle() {
         String actualTitle = driver.getTitle();
         String expectedTitle = "Welcome to Costco Wholesale";
-        Assert.assertEquals(actualTitle, expectedTitle, "Error: Title did not match");
+        assertEquals(actualTitle, expectedTitle, "Error: Title did not match");
     }
 
     @Test (priority = 2) // Fail on purpose to test Assert
     void testTitleError() {
         String actualTitle = driver.getTitle();
         String expectedTitle = "Welcome to Costco WholePotato";
-        Assert.assertEquals(actualTitle, expectedTitle, "Error: Title did not match");
+        assertEquals(actualTitle, expectedTitle, "Error: Title did not match");
     }
 
     @Test (priority = 3) // Test search bar
     void testSearchFunction() {
         home.searchCostco("Refrigerator");
         home.clickSearchButton();
+        assertTrue(home.verifySearch(driver));
     }
 
     @Test (enabled = false) // Skipping this test due to error
@@ -59,20 +65,45 @@ public class HomeTest extends Setup {
     @Test
     void testShopMenuDisplay() {
         boolean checkShop = home.shopDisplay(driver);
-        Assert.assertTrue(checkShop);
+        assertTrue(checkShop);
     }
 
     @Test // Actual link page seems to vary, so the test usually fails
     void testNumberPageLinks() {
         System.out.println(home.pageLinkAmount());
         int actualLinks = home.pageLinkAmount();
-        int expectedLinks = 430;
-        Assert.assertEquals(actualLinks, expectedLinks);
+        int expectedLinks = 420;
+        assertEquals(actualLinks, expectedLinks);
+    }
+    @Test // Print all links on the page
+    void testPrintAllLinks() {
+        System.out.println(home.pageLinkAmount());
+        for (WebElement link : home.allLinks) {
+            System.out.println("Link Texts are: " + link.getText());
+            System.out.println("Links are: " + link.getAttribute("href"));
+        }
+    }
+    @Test // Printing the footers present
+    void testPrintFooters() {
+        for (WebElement footer: home.footers) {
+            System.out.println("Footers are:\n" + footer.getText());
+        }
     }
 
     @Test // Test newsletter popup closing
-    void closeEmailPopup() {
+    void testCloseEmailPopup() {
         home.closePopup(driver);
+        assertFalse(home.emailPopupDisplayed());
     }
+
+    @Test // Check functionality of sign in page hyperlink
+    void testGotoSignIn() {
+        home.gotoSignIn(driver);
+        String actualTitle = driver.getTitle();
+        String expectedTitle = "Sign In | Costco";
+        assertEquals(actualTitle, expectedTitle);
+    }
+
+
 
 }

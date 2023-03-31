@@ -1,11 +1,13 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 
 <suite name="Full">
-    <test name="Testing Everything" >
+    <test name="Test All Pages" >
         <classes>
             <class name="HomeTest"/>
-            <class name="Groups.Group1Methods"/>
-            <class name="Annotations.TestPriorityDescription"/>
+            <class name="SignInTest"/>
+            <class name="MembershipTest"/>
+            <class name="CartTest"/>
+            <class name="iFrameDemo"/>
         </classes>
     </test>
 </suite>
