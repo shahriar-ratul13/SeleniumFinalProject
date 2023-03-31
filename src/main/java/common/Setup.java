@@ -95,7 +95,4 @@ public class Setup {
         WebDriverWait wait = new WebDriverWait(dr, 30);
         wait.until(ExpectedConditions.visibilityOf(el));
     }
-
-
-
 }

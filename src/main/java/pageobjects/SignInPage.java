@@ -77,5 +77,4 @@ public class SignInPage extends Setup {
     public boolean createAccountButtonEnabled() {
         return createAccountButton.isEnabled();
     }
-
 }

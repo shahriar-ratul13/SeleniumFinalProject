@@ -49,6 +49,9 @@ public class CartPage extends Setup {
     @FindBy(css = "[automation-id='shopCartCheckoutButton']")
     WebElement cartCheckoutButton;
 
+    @FindBy(css = "[automation-id='shoppingCartEmpty']")
+    WebElement emptyCart;
+
     public void searchCostco(String input) {
         searchBar.sendKeys(input);
     }
@@ -124,5 +127,10 @@ public class CartPage extends Setup {
     public boolean cartCheckoutButtonDisplayed (WebDriver dr) {
         explicitWaitClickable(dr, cartCheckoutButton);
         return cartCheckoutButton.isDisplayed();
+    }
+
+    public boolean emptyCartDisplayed(WebDriver dr) {
+        explicitWaitVisible(dr, emptyCart);
+        return emptyCart.isDisplayed();
     }
 }

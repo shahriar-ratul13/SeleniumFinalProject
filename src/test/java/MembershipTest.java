@@ -3,7 +3,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageobjects.MembershipPage;
@@ -12,12 +11,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.*;
-// 10 test
+
+// 10 tests
 public class MembershipTest extends Setup {
 
     MembershipPage membership;
 
-    @BeforeMethod  // Open a new browser window for each test
+    @BeforeMethod(alwaysRun = true)
+        // Open a new browser window for each test
     void initializeTest() {
         // Open the page for testing
         openBrowser("https://www.costco.com/join-costco.html");
@@ -27,7 +28,8 @@ public class MembershipTest extends Setup {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    @AfterMethod // Close all browser windows and driver instances after tests are completed, combined due to multiple windows
+    @AfterMethod(alwaysRun = true)
+        // Close all browser windows and driver instances after tests are completed, combined due to multiple windows
     void exitDriver() {
         closeBrowser();
         quitDriver();
@@ -53,7 +55,7 @@ public class MembershipTest extends Setup {
         assertEquals(options.size(), 57);
     }
 
-    @Test
+    @Test (groups = "gotoLinkCheck")
     void testOpeningExecutiveMembershipNewTab() {
         membership.gotoExecutiveMembership(driver);
         switchWindow(driver);
@@ -62,32 +64,32 @@ public class MembershipTest extends Setup {
         assertTrue(membership.executiveTextDisplayed());
     }
 
-    @Test
+    @Test(groups = {"gotoLinkCheck", "displayCheck"})
     void testReturningToJoinCostcoPage() {
         membership.gotoExecutiveMembership(driver);
         switchToParentWindow(driver);
         assertTrue(membership.renewMembershipDisplayed());
     }
 
-    @Test
+    @Test(groups = "displayCheck")
     void testBusinessMembershipSwitch() {
         membership.switchMembershipBusiness();
         assertTrue(membership.businessHeaderDisplayed());
     }
 
-    @Test
-    void testBusinessButton(){
+    @Test(groups = "displayCheck")
+    void testBusinessButton() {
         membership.switchMembershipBusiness();
         assertTrue(membership.businessDisplayed());
     }
 
-    @Test
-    void testBusinessExecutiveButton(){
+    @Test(groups = "displayCheck")
+    void testBusinessExecutiveButton() {
         membership.switchMembershipBusiness();
         assertTrue(membership.executiveBusinessDisplayed());
     }
 
-    @Test
+    @Test(groups = "displayCheck")
     void testPurchaseMembershipButton() {
         assertTrue(membership.purchaseMembershipDisplayed());
     }
@@ -105,5 +107,4 @@ public class MembershipTest extends Setup {
         switchWindow(driver);
         assertTrue(membership.citiJoin());
     }
-
 }

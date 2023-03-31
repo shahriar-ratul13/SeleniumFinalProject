@@ -7,12 +7,14 @@ import org.testng.annotations.Test;
 import pageobjects.CartPage;
 
 import static org.testng.Assert.*;
-// 8 test
+
+// 9 tests
 public class CartTest extends Setup {
 
     CartPage cart;
 
-    @BeforeMethod // Open a new browser window for each test
+    @BeforeMethod(alwaysRun = true)
+        // Open a new browser window for each test
     void initializeTest() {
         // Open the page for testing
         openBrowser("https://www.costco.com/grocery-household.html");
@@ -20,17 +22,20 @@ public class CartTest extends Setup {
         cart = PageFactory.initElements(driver, CartPage.class);
     }
 
-    @AfterMethod // Close all browser windows
+    @AfterMethod(alwaysRun = true)
+        // Close all browser windows
     void exitBrowser() {
         closeBrowser();
     }
 
-    @AfterTest // Close all driver instances after tests are completed
+    @AfterTest(alwaysRun = true)
+        // Close all driver instances after tests are completed
     void exitDriver() {
         quitDriver();
     }
 
-    @Test // Check if item has number added below it after cart addition
+    @Test
+        // Check if item has number added below it after cart addition
     void testCartSearch() {
         cart.searchCostco("Kirkland Signature Nature's Domain Salmon & Sweet Potato");
         cart.clickSearchButton();
@@ -39,14 +44,16 @@ public class CartTest extends Setup {
         assertTrue(cart.itemInCartDisplayed(driver));
     }
 
-    @Test // Check if search item appears
+    @Test
+        // Check if search item appears
     void testItemSearchDisplay() {
         cart.searchCostco("Kind Mini Bars, Variety Pack, 0.7 oz, 36-count");
         cart.clickSearchButton();
         assertTrue(cart.searchItemDisplayed(driver));
     }
 
-    @Test // Test if small icon with quantity in cart pops up
+    @Test
+        // Test if small icon with quantity in cart pops up
     void testCartAmountIconDisplay() {
         cart.searchCostco("Kirkland Signature Nature's Domain Salmon & Sweet Potato");
         cart.clickSearchButton();
@@ -55,7 +62,8 @@ public class CartTest extends Setup {
         assertTrue(cart.cartAmountIconDisplayed(driver));
     }
 
-    @Test // Test if items are visible in Cart page
+    @Test
+        // Test if items are visible in Cart page
     void testCartButton() {
         cart.searchCostco("Kirkland Signature Nature's Domain Salmon & Sweet Potato");
         cart.clickSearchButton();
@@ -92,7 +100,7 @@ public class CartTest extends Setup {
         assertTrue(cart.continueShoppingDisplayed(driver));
     }
 
-    @Test
+    @Test(groups = {"gotoLinkCheck", "displayCheck"})
     void testGotoCartFromItemPage() {
         cart.searchCostco("Kind Mini Bars, Variety Pack, 0.7 oz, 36-count");
         cart.clickSearchButton();
@@ -100,5 +108,11 @@ public class CartTest extends Setup {
         cart.clickAddToCartItemPage(driver);
         cart.clickViewCart(driver);
         assertTrue(cart.cartCheckoutButtonDisplayed(driver));
+    }
+
+    @Test
+    void testEmptyCartDisplay() {
+        cart.clickCartButton();
+        assertTrue(cart.emptyCartDisplayed(driver));
     }
 }

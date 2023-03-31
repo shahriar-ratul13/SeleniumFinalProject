@@ -4,6 +4,7 @@ import common.Setup;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +49,7 @@ public class HomePage extends Setup {
     @FindBy(id = "Home_Ancillary_2")
     WebElement deals;
 
+
     // Method for typing words into search bar with string parameter
     public void searchCostco(String input) {
         searchBar.sendKeys(input);
@@ -67,7 +69,7 @@ public class HomePage extends Setup {
     // Get the link elements from Shop Menu
     public ArrayList<String> shopMenu() {
         ArrayList<String> links = new ArrayList<>();
-        for (WebElement link: shopLinks) {
+        for (WebElement link : shopLinks) {
             links.add(link.getText());
         }
         return links;
@@ -98,4 +100,7 @@ public class HomePage extends Setup {
         return emailPopup.isDisplayed();
     }
 
+    public void clickDeals() {
+        deals.click();
+    }
 }

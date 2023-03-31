@@ -7,8 +7,6 @@ import org.openqa.selenium.support.FindBy;
 
 public class MembershipPage extends Setup {
 
-
-
     @FindBy(css = "[data-bi-title='select gold star']")
     WebElement goldStarMembership;
 
@@ -53,6 +51,7 @@ public class MembershipPage extends Setup {
     @FindBy(css = "[class='Hero_7__partner_link__application']")
     WebElement citiPageJoinLink;
 
+
     public void gotoGoldStarMembership() {
         goldStarMembership.click();
     }
@@ -78,7 +77,7 @@ public class MembershipPage extends Setup {
         return purchaseMembership.isDisplayed();
     }
 
-    public boolean renewMembershipDisplayed(){
+    public boolean renewMembershipDisplayed() {
         return renewMembership.isDisplayed();
     }
 
@@ -106,9 +105,7 @@ public class MembershipPage extends Setup {
         externalLinkConfirmation.click();
     }
 
-
     public boolean citiJoin() {
         return citiPageJoinLink.isDisplayed();
     }
-
 }

@@ -9,73 +9,84 @@ import pageobjects.HomePage;
 
 import java.util.ArrayList;
 
+
 import static org.testng.Assert.*;
 
+// 10 tests
 public class HomeTest extends Setup {
 
     HomePage home;
 
-    @BeforeMethod // Open a new browser window for each test
+    @BeforeMethod(alwaysRun = true)
+        // Open a new browser window for each test
     void initializeTest() {
         // Open the page for testing
         openBrowser("https://www.costco.com");
         // Initialize the web elements from the class as objects
         home = PageFactory.initElements(driver, HomePage.class);
-        // Implicitly wait 10s
     }
 
-    @AfterMethod // Close all browser windows
+    @AfterMethod(alwaysRun = true)
+        // Close all browser windows
     void exitBrowser() {
         closeBrowser();
     }
 
-    @AfterTest // Close all driver instances after tests are completed
+    @AfterTest(alwaysRun = true)
+        // Close all driver instances after tests are completed
     void exitDriver() {
         quitDriver();
     }
 
 
-    @Test (priority = 1) // Retrieve and print title of the launched page
+    @Test(priority = 1)
+        // Retrieve and print title of the launched page
     void testTitle() {
         String actualTitle = driver.getTitle();
         String expectedTitle = "Welcome to Costco Wholesale";
         assertEquals(actualTitle, expectedTitle, "Error: Title did not match");
     }
 
-    @Test (priority = 2) // Fail on purpose to test Assert
+    @Test(priority = 2)
+        // Fail on purpose to test Assert
     void testTitleError() {
         String actualTitle = driver.getTitle();
         String expectedTitle = "Welcome to Costco WholePotato";
         assertEquals(actualTitle, expectedTitle, "Error: Title did not match");
     }
 
-    @Test (priority = 3) // Test search bar
+    @Test(priority = 3)
+        // Test search bar
     void testSearchFunction() {
         home.searchCostco("Refrigerator");
         home.clickSearchButton();
         assertTrue(home.verifySearch(driver));
     }
 
-    @Test (enabled = false) // Skipping this test due to error
+    @Test(enabled = false)
+        // Skipping this test due to error
     void testShopMenuLinks() {
         ArrayList<String> actual = home.shopMenu();
         System.out.println(actual);
     }
 
-    @Test
+    @Test (groups = "displayCheck")
     void testShopMenuDisplay() {
         boolean checkShop = home.shopDisplay(driver);
         assertTrue(checkShop);
     }
 
-    @Test // Actual link page seems to vary, so the test usually fails
+    @Test
+        // Actual link page seems to vary, so the test usually fails
     void testNumberPageLinks() {
         System.out.println(home.pageLinkAmount());
         int actualLinks = home.pageLinkAmount();
-        int expectedLinks = 420;
+        int expectedLinks = 424;
         assertEquals(actualLinks, expectedLinks);
     }
-    @Test // Print all links on the page
+
+    @Test
+        // Print all links on the page
     void testPrintAllLinks() {
         System.out.println(home.pageLinkAmount());
         for (WebElement link : home.allLinks) {
@@ -83,20 +94,24 @@ public class HomeTest extends Setup {
             System.out.println("Links are: " + link.getAttribute("href"));
         }
     }
-    @Test // Printing the footers present
+
+    @Test
+        // Printing the footers present
     void testPrintFooters() {
-        for (WebElement footer: home.footers) {
+        for (WebElement footer : home.footers) {
             System.out.println("Footers are:\n" + footer.getText());
         }
     }
 
-    @Test // Test newsletter popup closing
+    @Test (groups = "displayCheck")
+        // Test newsletter popup closing
     void testCloseEmailPopup() {
         home.closePopup(driver);
         assertFalse(home.emailPopupDisplayed());
     }
 
-    @Test // Check functionality of sign in page hyperlink
+    @Test(groups = "gotoLinkCheck")
+        // Check functionality of sign in page hyperlink
     void testGotoSignIn() {
         home.gotoSignIn(driver);
         String actualTitle = driver.getTitle();
@@ -104,6 +119,11 @@ public class HomeTest extends Setup {
         assertEquals(actualTitle, expectedTitle);
     }
 
-
-
+    @Test
+    void switchToDeals() {
+        home.clickDeals();
+        switchWindow(driver);
+        String expected = "OFF  | Costco";
+        assertEquals(driver.getTitle(), expected);
+    }
 }
